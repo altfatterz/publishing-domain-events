@@ -3,6 +3,8 @@ package com.example;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * @author Zoltan Altfatter
  */
@@ -23,5 +25,10 @@ public class BankTransferService {
     @Transactional(readOnly = true)
     public BankTransfer findById(String id) {
         return repository.findById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public List<BankTransfer> findAll() {
+        return repository.findAll();
     }
 }

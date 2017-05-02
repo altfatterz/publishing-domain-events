@@ -3,15 +3,10 @@ package com.example;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.ToString;
-import org.springframework.data.domain.AfterDomainEventPublication;
-import org.springframework.data.domain.DomainEvents;
-import org.springframework.util.Assert;
+import org.springframework.data.domain.AbstractAggregateRoot;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import java.util.UUID;
 
 /**
@@ -21,7 +16,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @ToString(exclude = "domainEvents")
-public class BankTransfer {
+public class BankTransfer extends AbstractAggregateRoot {
 
     @Id
     private String id;
@@ -29,8 +24,6 @@ public class BankTransfer {
     private String destinationBankAccountId;
     private long amountInCents;
     private Status status;
-
-    private transient final List<BankTransferCompletedEvent> domainEvents = new ArrayList<BankTransferCompletedEvent>();
 
     // JPA
     private BankTransfer() {
@@ -47,21 +40,6 @@ public class BankTransfer {
         id = UUID.randomUUID().toString();
         registerEvent(new BankTransferCompletedEvent(id));
         return this;
-    }
-
-    @DomainEvents
-    Collection<BankTransferCompletedEvent> domainEvents() {
-        return domainEvents;
-    }
-
-    @AfterDomainEventPublication
-    public void clearDomainEvents() {
-        this.domainEvents.clear();
-    }
-
-    protected void registerEvent(BankTransferCompletedEvent event) {
-        Assert.notNull(event, "Domain event must not be null!");
-        this.domainEvents.add(event);
     }
 
     enum Status {
@@ -85,6 +63,14 @@ public class BankTransfer {
                     String.format("Cannot complete a bank transfer that is currently not in STARTED mode! Current status: %s", this.status));
         }
         status = Status.COMPLETED;
+    }
+
+    public void markFailed() {
+        if (status != Status.STARTED) {
+            throw new IllegalStateException(
+                    String.format("Cannot fail a bank transfer that is currently not in STARTED mode! Current status: %s", this.status));
+        }
+        status = Status.FAILED;
     }
 
 

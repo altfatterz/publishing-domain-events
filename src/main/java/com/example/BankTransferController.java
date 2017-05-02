@@ -5,6 +5,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * @author Zoltan Altfatter
  */
@@ -26,8 +29,22 @@ public class BankTransferController {
     @GetMapping("/transfers/{id}")
     public ResponseEntity<BankTransferView> findById(@PathVariable String id) {
         BankTransfer bankTransfer = service.findById(id);
-        return ResponseEntity.ok(new BankTransferView(bankTransfer.getId(), bankTransfer.getSourceBankAccountId(),
-                bankTransfer.getDestinationBankAccountId(), bankTransfer.getAmountInCents(), bankTransfer.getStatus().toString()));
+        if (bankTransfer == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(createView(bankTransfer));
+    }
+
+    @GetMapping("/transfers")
+    public ResponseEntity<List<BankTransferView>> findAll() {
+        List<BankTransfer> bankTransfers = service.findAll();
+        List<BankTransferView> view = bankTransfers.stream().map(bankTransfer -> createView(bankTransfer)).collect(Collectors.toList());
+        return ResponseEntity.ok(view);
+    }
+
+    private BankTransferView createView(BankTransfer bankTransfer) {
+        return new BankTransferView(bankTransfer.getId(), bankTransfer.getSourceBankAccountId(),
+                bankTransfer.getDestinationBankAccountId(), bankTransfer.getAmountInCents(), bankTransfer.getStatus().toString());
     }
 
     @Value

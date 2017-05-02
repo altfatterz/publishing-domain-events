@@ -5,6 +5,8 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.event.TransactionalEventListener;
 
+import java.util.Random;
+
 /**
  * @author Zoltan Altfatter
  */
@@ -33,7 +35,12 @@ public class BankTransferProcessor {
             throw new RuntimeException(e);
         }
 
-        bankTransfer.markCompleted();
+        if (new Random().nextBoolean()) {
+            bankTransfer.markCompleted();
+        } else {
+            bankTransfer.markFailed();
+        }
+
         repository.save(bankTransfer);
 
         log.info("Finished processing bank transfer {}.", bankTransfer);

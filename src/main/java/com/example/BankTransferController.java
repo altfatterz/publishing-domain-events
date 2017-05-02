@@ -1,8 +1,9 @@
 package com.example;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Zoltan Altfatter
@@ -17,13 +18,36 @@ public class BankTransferController {
     }
 
     @PostMapping("/transfers")
-    public void transfer(@RequestBody BankTransferRequest request) {
-        service.completeTransfer(new BankTransfer(request.from, request.to, request.amountInCents));
+    public ResponseEntity<CreateBankTransferResponse> transfer(@RequestBody CreateBankTransferRequest request) {
+        String bankTransferId = service.completeTransfer(new BankTransfer(request.from, request.to, request.amountInCents));
+        return new ResponseEntity(new CreateBankTransferResponse(bankTransferId), HttpStatus.CREATED);
     }
 
-    static class BankTransferRequest {
+    @GetMapping("/transfers/{id}")
+    public ResponseEntity<BankTransferView> findById(@PathVariable String id) {
+        BankTransfer bankTransfer = service.findById(id);
+        return ResponseEntity.ok(new BankTransferView(bankTransfer.getId(), bankTransfer.getSourceBankAccountId(),
+                bankTransfer.getDestinationBankAccountId(), bankTransfer.getAmountInCents(), bankTransfer.getStatus().toString()));
+    }
+
+    @Value
+    static class CreateBankTransferRequest {
         String from;
         String to;
         long amountInCents;
+    }
+
+    @Value
+    static class CreateBankTransferResponse {
+        String bankTransferId;
+    }
+
+    @Value
+    static class BankTransferView {
+        String bankTransferId;
+        String from;
+        String to;
+        long amountInCents;
+        String status;
     }
 }

@@ -1,6 +1,7 @@
 package com.example;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.ToString;
 import org.springframework.data.domain.AfterDomainEventPublication;
 import org.springframework.data.domain.DomainEvents;
@@ -17,8 +18,9 @@ import java.util.UUID;
  * @author Zoltan Altfatter
  */
 @Entity
+@Data
 @AllArgsConstructor
-@ToString
+@ToString(exclude = "domainEvents")
 public class BankTransfer {
 
     @Id
@@ -84,7 +86,6 @@ public class BankTransfer {
         }
         status = Status.COMPLETED;
     }
-
 
 
 }

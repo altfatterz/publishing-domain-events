@@ -16,7 +16,12 @@ public class BankTransferService {
     }
 
     @Transactional
-    public void completeTransfer(BankTransfer bankTransfer) {
-        repository.save(bankTransfer.complete());
+    public String completeTransfer(BankTransfer bankTransfer) {
+        return repository.save(bankTransfer.complete()).getId();
+    }
+
+    @Transactional(readOnly = true)
+    public BankTransfer findById(String id) {
+        return repository.findById(id);
     }
 }

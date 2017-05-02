@@ -7,6 +7,8 @@ import org.springframework.data.repository.Repository;
  */
 public interface BankAccountRepository extends Repository<BankAccount, Long> {
 
-    void save(BankAccount bankAccount);
+    BankAccount save(BankAccount bankAccount);
+
+    BankAccount findById(Long id);
 
 }

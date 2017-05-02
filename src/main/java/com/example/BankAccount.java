@@ -1,5 +1,6 @@
 package com.example;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.AbstractAggregateRoot;
 import org.springframework.data.domain.AfterDomainEventPublication;
@@ -16,6 +17,7 @@ import java.util.Collections;
  */
 @Slf4j
 @Entity
+@Getter
 public class BankAccount extends AbstractAggregateRoot {
 
     @Id
@@ -23,7 +25,10 @@ public class BankAccount extends AbstractAggregateRoot {
     private Long id;
 
     private Long overdraftLimit;  // Use MonetaryAmount
-    private Long balanceInCents;
+    private Long balanceInCents = 0L;
+
+    // JPA
+    private BankAccount() {}
 
     public BankAccount(Long overdraftLimit) {
         this.overdraftLimit = overdraftLimit;

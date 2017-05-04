@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,7 +23,7 @@ public class BankTransferController {
 
     @PostMapping("/bank-transfers")
     public ResponseEntity<CreateBankTransferResponse> transfer(@RequestBody CreateBankTransferRequest request) {
-        String bankTransferId = service.completeTransfer(new BankTransfer(request.from, request.to, request.amountInCents));
+        String bankTransferId = service.completeTransfer(new BankTransfer(request.from, request.to, request.getAmount()));
         return new ResponseEntity(new CreateBankTransferResponse(bankTransferId), HttpStatus.CREATED);
     }
 
@@ -44,14 +45,14 @@ public class BankTransferController {
 
     private BankTransferView createView(BankTransfer bankTransfer) {
         return new BankTransferView(bankTransfer.getId(), bankTransfer.getSourceBankAccountId(),
-                bankTransfer.getDestinationBankAccountId(), bankTransfer.getAmountInCents(), bankTransfer.getStatus().toString());
+                bankTransfer.getDestinationBankAccountId(), bankTransfer.getAmount(), bankTransfer.getStatus().toString());
     }
 
     @Value
     static class CreateBankTransferRequest {
         String from;
         String to;
-        long amountInCents;
+        BigDecimal amount;
     }
 
     @Value
@@ -64,7 +65,7 @@ public class BankTransferController {
         String bankTransferId;
         String from;
         String to;
-        long amountInCents;
+        BigDecimal amount;
         String status;
     }
 }

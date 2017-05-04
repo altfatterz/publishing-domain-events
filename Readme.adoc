@@ -1,6 +1,15 @@
 = Publishing domain events
 
 ```bash
-$ echo '{"from":123, "to":234, "amountInCents":100}' | http post :8080/bank-transfers
-$ http :8080/transfers
+$ echo '{
+            "from":"DE89 3704 0044 0532 0130 00",
+            "to":"HU42 1177 3016 1111 1018 0000 0000",
+            "amountInCents":100
+        }' | \
+  http post :8080/bank-transfers
+```
 
+```bash
+
+$ http :8080/transfers
+```

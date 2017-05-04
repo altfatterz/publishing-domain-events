@@ -7,6 +7,7 @@ import org.springframework.data.domain.AbstractAggregateRoot;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.math.BigDecimal;
 import java.util.UUID;
 
 /**
@@ -22,17 +23,17 @@ public class BankTransfer extends AbstractAggregateRoot {
     private String id;
     private String sourceBankAccountId;
     private String destinationBankAccountId;
-    private long amountInCents;
+    private BigDecimal amount;
     private Status status;
 
     // JPA
     private BankTransfer() {
     }
 
-    public BankTransfer(String sourceBankAccountId, String destinationBankAccountId, long amountInCents) {
+    public BankTransfer(String sourceBankAccountId, String destinationBankAccountId, BigDecimal amount) {
         this.sourceBankAccountId = sourceBankAccountId;
         this.destinationBankAccountId = destinationBankAccountId;
-        this.amountInCents = amountInCents;
+        this.amount = amount;
         this.status = Status.CREATED;
     }
 

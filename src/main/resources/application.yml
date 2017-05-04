@@ -1,0 +1,10 @@
+logging:
+  level:
+    org:
+      springframework:
+        transaction: DEBUG
+
+spring:
+  h2:
+    console:
+      enabled: true

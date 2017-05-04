@@ -20,13 +20,13 @@ public class BankTransferController {
         this.service = service;
     }
 
-    @PostMapping("/transfers")
+    @PostMapping("/bank-transfers")
     public ResponseEntity<CreateBankTransferResponse> transfer(@RequestBody CreateBankTransferRequest request) {
         String bankTransferId = service.completeTransfer(new BankTransfer(request.from, request.to, request.amountInCents));
         return new ResponseEntity(new CreateBankTransferResponse(bankTransferId), HttpStatus.CREATED);
     }
 
-    @GetMapping("/transfers/{id}")
+    @GetMapping("/bank-transfers/{id}")
     public ResponseEntity<BankTransferView> findById(@PathVariable String id) {
         BankTransfer bankTransfer = service.findById(id);
         if (bankTransfer == null) {
@@ -35,7 +35,7 @@ public class BankTransferController {
         return ResponseEntity.ok(createView(bankTransfer));
     }
 
-    @GetMapping("/transfers")
+    @GetMapping("/bank-transfers")
     public ResponseEntity<List<BankTransferView>> findAll() {
         List<BankTransfer> bankTransfers = service.findAll();
         List<BankTransferView> view = bankTransfers.stream().map(bankTransfer -> createView(bankTransfer)).collect(Collectors.toList());

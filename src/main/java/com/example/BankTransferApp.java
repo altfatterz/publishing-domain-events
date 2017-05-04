@@ -6,10 +6,10 @@ import org.springframework.scheduling.annotation.EnableAsync;
 
 @SpringBootApplication
 @EnableAsync
-public class PublishingDomainEventsApplication {
+public class BankTransferApp {
 
     public static void main(String[] args) {
-        SpringApplication.run(PublishingDomainEventsApplication.class, args);
+        SpringApplication.run(BankTransferApp.class, args);
     }
 
 }

@@ -1,0 +1,6 @@
+= Publishing domain events
+
+```bash
+$ echo '{"from":123, "to":234, "amountInCents":100}' | http post :8080/bank-transfers
+$ http :8080/transfers
+

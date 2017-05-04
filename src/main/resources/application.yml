@@ -1,10 +1,6 @@
 logging:
   level:
-    org:
-      springframework:
-        transaction: DEBUG
+    org.springframework.transaction.interceptor: TRACE
 
 spring:
-  h2:
-    console:
-      enabled: true
+  h2.console.enabled: true

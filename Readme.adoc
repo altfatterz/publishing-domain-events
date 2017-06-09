@@ -11,5 +11,5 @@ $ echo '{
 
 ```bash
 
-$ http :8080/transfers
+$ http :8080/bank-transfers
 ```

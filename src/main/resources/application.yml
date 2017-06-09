@@ -1,6 +1,7 @@
 logging:
   level:
     org.springframework.transaction.interceptor: TRACE
+    org.springframework.orm.jpa: DEBUG
 
 spring:
   h2.console.enabled: true

@@ -1,5 +1,7 @@
 = Publishing domain events
 
+Example used for blog post http://zoltanaltfatter.com/2017/06/09/publishing-domain-events-from-aggregate-roots/
+
 ```bash
 $ echo '{
             "from":"DE89 3704 0044 0532 0130 00",
